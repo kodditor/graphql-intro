@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -7,16 +8,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model authors {
+model Author {
   id    String   @id @default(auto()) @map("_id") @db.ObjectId
-  books String[]
-  id_   String   @map("id")
+  books Book[]
   name  String
+  createdAt String
 }
 
-model books {
+model Book {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
-  author String
-  id_    String @map("id")
+  authorId String @db.ObjectId
+  author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  pubId String? @db.ObjectId 
+  publisher Publisher? @relation(fields: [pubId], references: [id], onDelete: SetNull) 
   title  String
+  createdAt String
+}
+
+model Publisher {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  books Book[]
+  createdAt String
 }

@@ -1,0 +1,97 @@
+interface IMutationsResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+}
+
+type MutationsResponse implements IMutationsResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+}
+
+type Book {
+  id: String
+  title: String
+  author: Author
+  publisher: Publisher
+  createdAt: String
+}
+
+type Author {
+  id: String
+  name: String
+  books: [Book]
+  createdAt: String
+}
+
+type Publisher {
+  id: String
+  name: String
+  books: [Book]
+  createdAt: String
+}
+
+type Query {
+  "Get"
+  book(bookId: String!): Book
+  author(authorID: String!): Author
+  publisher(pubId: String!): Publisher
+
+  "List"
+  books: [Book]
+  authors: [Author]
+  publishers: [Publisher]
+}
+
+type Mutation {
+  "Create"
+  addAuthor(name: String!): AddAuthorResponse
+  addBook(title: String!, authorId: String!, pubId: String!): AddBookResponse
+  addPublisher(name: String!): AddPublisherReponse
+
+  "Update"
+  updateAuthor(authorId: String!, input: updateAuthorInput!): MutationsResponse
+  updateBook(bookId: String!, input: updateBookInput!): MutationsResponse
+  updatePublisher(pubId: String!, input: updatePublisherInput!): MutationsResponse
+
+  "Delete"
+  deleteAuthor(authorId: String!): MutationsResponse
+  deleteBook(bookId: String!): MutationsResponse
+  deletePublisher(pubId: String!): MutationsResponse
+}
+
+type AddBookResponse implements IMutationsResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+  book: Book
+}
+
+type AddAuthorResponse implements IMutationsResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+  author: Author
+}
+
+type AddPublisherReponse implements IMutationsResponse {
+  code: String!
+  message: String!
+  success: Boolean!
+  publisher: Publisher
+}
+
+input updateAuthorInput {
+  name: String!
+}
+
+input updateBookInput {
+  title: String
+  author: String
+  publisher: String
+}
+
+input updatePublisherInput {
+  name: String!
+}
